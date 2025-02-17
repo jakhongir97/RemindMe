@@ -7,26 +7,23 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct RemindMeApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    // ✅ Use a static instance instead of @StateObject here
+    private static let sharedNotificationManager = NotificationManager()
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    init() {
+        // ✅ Set the delegate using the static instance
+        UNUserNotificationCenter.current().delegate = RemindMeApp.sharedNotificationManager
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(RemindMeApp.sharedNotificationManager) // ✅ Use the static instance
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: [Reminder.self])
     }
 }
