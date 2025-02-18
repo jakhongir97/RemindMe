@@ -137,10 +137,11 @@ struct ContentView: View {
 
     private func updateReminderStatuses() {
         let now = Date()
-        for reminder in reminders where reminder.status == .active {
+        for reminder in reminders {
             let notifyDate = reminder.date.addingTimeInterval(-reminder.notifyBefore.timeInterval)
-            if notifyDate <= now && now <= reminder.date {
-                reminder.status = .pending
+            
+            if reminder.status == .active && notifyDate <= now {
+                reminder.status = .pending // ✅ Moves to pending when notify time has passed
             }
         }
         try? context.save()

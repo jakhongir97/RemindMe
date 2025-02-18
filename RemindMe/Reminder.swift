@@ -28,13 +28,15 @@ final class Reminder {
     var title: String
     var notes: String
     var date: Date
+    var creationDate: Date // ✅ Added to track when the reminder was created
     var status: ReminderStatus
     var notifyBefore: NotificationInterval
-
+    
     init(title: String, notes: String = "", date: Date, status: ReminderStatus = .active, notifyBefore: NotificationInterval = .day) {
         self.title = title
         self.notes = notes
         self.date = date
+        self.creationDate = Date() // ✅ Set the creation date when created
         self.status = status
         self.notifyBefore = notifyBefore
     }
